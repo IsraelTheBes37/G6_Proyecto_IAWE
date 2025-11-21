@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Inscripción de Cliente</title>
+    <link rel="stylesheet" href="css/registro.css">
+    <script src="js/registroCliente.js"></script>
+</head>
+<body>
+    <div class="overlay"></div>
+    <!-- menu -->
+<header>
+       <div class="container">
+           <div class="logo">Delibery Fast</div>
+           <nav>                    
+                <a class="active" href="index.html">Inicio</a>
+                <a href="vistaInscripcion.html">Registrarse</a>
+                <a href="loginVista.php">Ingresar</a>
+                <a href="Contacto.html">Formulario de contacto</a>
+           </nav>
+       </div>
+</header> 
+<section class="contenedorf"> 
+    
+    <form action="../backend/models/registroCliente.php" method="POST">
+        <h1>Registro <span class="color-acento"> Nuevo Cliente</h1>
+            <input type="text" name="nombre" placeholder="Escriba su nombre" required> <br>           
+            <input type="text" name="apellido" placeholder="Escriba su apellido" required><br>            
+            <input type="number" name="representante" placeholder="Representante (ID de empleado)"><br>            
+            <input type="text" name="calle" placeholder="Escriba su dirección"><br>            
+            <input type="text" name="porton" placeholder="Escriba el número del portal"><br>            
+            <input type="text" name="num_piso" placeholder="Escriba su número de piso"><br>
+            <input type="text" name="cp" placeholder="Código postal"><br> 
+            <input type="text" name="telefono" placeholder="Teléfono"><br>
+            <input type="email" name="correo" placeholder="Correo electrónico" required><br>
+            <label>Clave (contraseña):</label><br>
+            <input type="password" name="clave" required><br><br>
+            <input type="submit" value="Registrar Cliente">
+    </form>
+</section>
+<footer>
+    <div class="container">
+        <p>&copy; Delibery Fast</p>
+    </div>
+</footer>
+</body>
+</html>
