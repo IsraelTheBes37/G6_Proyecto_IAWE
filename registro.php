@@ -1,25 +1,6 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulario de Inscripción de Cliente</title>
-    <link rel="stylesheet" href="css/registro.css">
-    <script src="js/registroCliente.js"></script>
-</head>
-<body>
-    <div class="overlay"></div>
-    <!-- menu -->
-<header>
-       <div class="container">
-           <div class="logo">Delibery Fast</div>
-           <nav>                    
-                <a class="active" href="index.html">Inicio</a>
-                <a href="vistaInscripcion.html">Registrarse</a>
-                <a href="loginVista.php">Ingresar</a>
-                <a href="Contacto.html">Formulario de contacto</a>
-           </nav>
-       </div>
-</header> 
+<?php
+include("includes/cabecera.php");
+?>
 <section class="contenedorf"> 
     
     <form action="../backend/models/registroCliente.php" method="POST">
@@ -43,5 +24,7 @@
         <p>&copy; Delibery Fast</p>
     </div>
 </footer>
-</body>
-</html>
+
+<?php
+include("includes/pie.php");
+?>
