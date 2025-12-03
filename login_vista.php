@@ -33,7 +33,7 @@
             <label for="clave">Clave:</label>
             <input type="password" id="clave" name="clave" required><br><br>
 
-            <input type="submit" value="Iniciar Sesión">
+            <input type="submit" name="inicio_sesion" value="Iniciar Sesión">
         </form>
     </body>
 </html>

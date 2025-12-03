@@ -1,7 +1,10 @@
 <?php
-include("includes/cabecera.php");
-?>
-
-<?php
-include("includes/pie.php");
+if (!isset($_POST["inicio_sesion"])) {
+    include "home_vista.php";
+} else {
+    
+}
+if (isset($_)) {
+        # code...
+    }
 ?>

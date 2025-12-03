@@ -1,95 +1,116 @@
 <?php
+// funciones.php - funciones para Agencia SwiftPack
 
-/* ===========================================================
-   FUNCIONES PARA EQUIPOS
-   =========================================================== */
+// ---------- Funciones de presentación ----------
+function pintarTablaVehiculos($vehiculos) {
+    echo "<table class='table'>";
+    echo "<tr><th>ID</th><th>Tipo</th><th>Matricula</th><th>Capacidad (kg)</th><th>Disponible</th><th>Km Recorridos</th></tr>";
+    foreach ($vehiculos as $v) {
+        echo "<tr>";
+        echo "<td>".htmlspecialchars($v['id'])."</td>";
+        echo "<td>".htmlspecialchars($v['tipo'])."</td>";
+        echo "<td>".htmlspecialchars($v['matricula'])."</td>";
+        echo "<td>".number_format($v['capacidad'],0,',','.')."</td>";
+        echo "<td>".($v['disponible'] ? 'Sí' : 'No')."</td>";
+        echo "<td>".number_format($v['km'],0,',','.')."</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+}
 
-/**
- * Nombre: mostrarTablaEquipos
- * Propósito: Generar y mostrar una tabla HTML que lista la información detallada
- *            de cada equipo, incluyendo el nombre, país, campeonatos y la lista
- *            de jugadores.
- * Recibe de entrada: Un array bidimensional y asociativo, $equipos.
- * Proporciona de salida: No devuelve un valor (void). Muestra directamente el
- *                        código HTML de la tabla mediante echo.
- */
+function pintarTablaServicios($servicios) {
+    echo "<table class='table'>";
+    echo "<tr><th>ID</th><th>Nombre</th><th>Zona</th><th>Precio base (€)</th><th>Tiempo estimado (h)</th></tr>";
+    foreach ($servicios as $s) {
+        echo "<tr>";
+        echo "<td>".htmlspecialchars($s['id'])."</td>";
+        echo "<td>".htmlspecialchars($s['nombre'])."</td>";
+        echo "<td>".htmlspecialchars($s['zona'])."</td>";
+        echo "<td>".number_format($s['precio'],2,'.','')."</td>";
+        echo "<td>".intval($s['tiempo'])."</td>";
+        echo "</tr>";
+    }
+    echo "</table>";
+}
 
+// ---------- Funciones utilitarias sobre arrays ----------
 
+// Contar vehículos disponibles
+function contarVehiculosDisponibles($vehiculos) {
+    $count = 0;
+    foreach ($vehiculos as $v) {
+        if (!empty($v['disponible'])) $count++;
+    }
+    return $count;
+}
 
-/**
- * Nombre: nombresEnMayusculas
- * Propósito: Recorrer el array de equipos y devolver un nuevo array que contenga
- *            solo los nombres de los equipos transformados a mayúsculas,
- *            y eliminando posibles espacios en blanco.
- * Recibe de entrada: Un array bidimensional y asociativo, $equipos.
- * Proporciona de salida: Un array unidimensional indexado con los nombres de los
- *                         equipos en mayúsculas.
- */
+// Sumar capacidad total
+function capacidadTotal($vehiculos) {
+    $total = 0;
+    foreach ($vehiculos as $v) {
+        $total += floatval($v['capacidad']);
+    }
+    return $total;
+}
 
+// Filtrar vehículos por tipo (ej: 'Furgoneta', 'Moto', 'Furgón')
+function vehiculosPorTipo($vehiculos, $tipo) {
+    $res = [];
+    foreach ($vehiculos as $v) {
+        if ($v['tipo'] === $tipo) $res[] = $v;
+    }
+    return $res;
+}
 
+// Ordenar vehículos por km (asc o desc) - usa uasort para mantener claves
+function ordenarVehiculosPorKm(&$vehiculos, $orden='asc') {
+    uasort($vehiculos, function($a, $b) use ($orden) {
+        if ($a['km'] == $b['km']) return 0;
+        if ($orden === 'asc') return ($a['km'] < $b['km']) ? -1 : 1;
+        return ($a['km'] > $b['km']) ? -1 : 1;
+    });
+}
 
-/**
- * Nombre: equipoNombreMasLargo
- * Propósito: Determinar y devolver el nombre del equipo cuya cadena de caracteres
- *            sea la más larga.
- * Recibe de entrada: Un array bidimensional y asociativo, $equipos.
- * Proporciona de salida: Una cadena (string) que contiene el nombre del equipo
- *                        con la longitud de nombre mayor.
- */
+// Aumentar precio de todos los servicios en porcentaje (ej 10 -> +10%)
+function aumentarPrecioServicios(&$servicios, $porcentaje) {
+    foreach ($servicios as &$s) {
+        $s['precio'] *= (1 + $porcentaje/100);
+    }
+    unset($s);
+}
 
+// Buscar servicio por id devuelve index o null
+function buscarServicioPorId($servicios, $id) {
+    foreach ($servicios as $s) {
+        if ($s['id'] == $id) return $s;
+    }
+    return null;
+}
 
+// Editar el precio de un servicio por id
+function cambiarPrecioServicio(&$servicios, $id, $nuevoPrecio) {
+    foreach ($servicios as &$s) {
+        if ($s['id'] == $id) {
+            $s['precio'] = floatval($nuevoPrecio);
+            return true;
+        }
+    }
+    unset($s);
+    return false;
+}
 
-/**
- * Nombre: jugadoresCapitalizados
- * Propósito: Recorrer el array anidado de jugadores de todos los equipos y
- *            devolver una lista plana donde cada nombre de jugador tenga la
- *            primera letra en mayúscula.
- * Recibe de entrada: Un array bidimensional y asociativo, $equipos, que contiene
- *                    arrays anidados con la clave 'jugadores'.
- * Proporciona de salida: Un array unidimensional indexado con los nombres de
- *                        todos los jugadores, capitalizados.
- */
+// Extraer todas las zonas disponibles (array único)
+function zonasUnicas($servicios) {
+    $zonas = [];
+    foreach ($servicios as $s) $zonas[] = $s['zona'];
+    return array_values(array_unique($zonas));
+}
 
-
-
-/* ===========================
-   FUNCIONES PARA ARMAS
-   =========================== */
-
-/**
- * Nombre: mostrarTablaArmas
- * Propósito: Generar y mostrar una tabla HTML que lista todas las propiedades
- *            de cada arma (nombre, tipo, precio, daño, penetración y cadencia).
- * Recibe de entrada: Un array bidimensional asociativo, $armas.
- * Proporciona de salida: No devuelve un valor (void). Muestra directamente el
- *                        código HTML de la tabla mediante echo.
- */
-
-
-
-/**
- * Nombre: armaMaxPenetracion
- * Propósito: Encontrar y devolver el array asociativo del arma que posee el valor
- *            más alto en la clave 'armadura_pen'. Implementa un algoritmo de
- *            búsqueda de máximo comparando el valor actual con el mejor encontrado
- *            hasta el momento.
- * Recibe de entrada: Un array bidimensional asociativo, $armas.
- * Proporciona de salida: Un array asociativo que representa el registro completo
- *                        del arma con la mayor penetración de armadura.
- */
-
-
-
-/**
- * Nombre: mejorScore
- * Propósito: Calcular un "score" de efectividad para cada arma basándose en una
- *            fórmula que combina sus estadísticas divididas por su precio. Devuelve
- *            el array del arma con el mejor score.
- * Recibe de entrada: Un array bidimensional asociativo, $armas.
- * Proporciona de salida: Un array asociativo que representa el registro completo
- *                        del arma con el mejor score calculado.
- */
-
-
-
+// Calcular coste estimado de envío según servicio, peso y distancia (ejemplo de uso)
+function estimarCoste($servicio, $pesoKg, $km) {
+    // fórmula simple: precio base + 0.5€/kg + 0.15€/km
+    $base = floatval($servicio['precio']);
+    $coste = $base + (0.5 * $pesoKg) + (0.15 * $km);
+    return $coste;
+}
 ?>
