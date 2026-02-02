@@ -1,6 +1,3 @@
-<?php
-// includes/cabecera.php
-?>
 <!doctype html>
 <html lang="es">
 <head>
@@ -17,10 +14,17 @@
             <h1>Agencia de Paquetería</h1>
         </div>
         <nav class="main-nav">
-            <a href="home_vista.php">Home</a>
-            <a href="servicios_vista.php">Servicios</a>
-            <a href="vehiculos_vista.php">Nuestros Vehículos</a>
-            <a href="acerca_vista.php">Sobre Nosotros</a>
+            <a href="index.php">Inicio</a>
+            <a href="index.php?accion=servicios">Servicios</a>
+            <a href="index.php?accion=vehiculos">Vehículos</a>
+            <a href="index.php?accion=acerca">Sobre nosotros</a>
+
+            <?php if (isset($_SESSION['usuario'])): ?>
+                <a href="index.php?accion=dashboard">Dashboard</a>
+                <a href="index.php?accion=logout">Salir</a>
+            <?php else: ?>
+                <a href="index.php?accion=login">Login</a>
+            <?php endif; ?>
         </nav>
     </div>
 </header>

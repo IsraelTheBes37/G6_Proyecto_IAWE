@@ -57,3 +57,133 @@ body{
   .header-inner{ flex-direction:column; gap:8px; align-items:flex-start; }
   .main-nav{ display:flex; gap:8px; flex-wrap:wrap;}
 }
+
+    .card-form {
+        max-width: 450px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        font-family: Arial, sans-serif;
+    }
+
+    .card-form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .card-form label {
+        font-weight: bold;
+        color: #444;
+    }
+
+    .card-form input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    .card-form input:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 4px rgba(0,123,255,0.4);
+    }
+
+    .card-form .error {
+        color: #d60000;
+        font-size: 14px;
+        margin: 5px 0 10px 0;
+    }
+
+    .card-form button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 16px;
+        background: var(--celeste);
+        color: var(--blanco);
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .card-form button.secondary {
+        background: #fff;
+        color: var(--celeste);
+        border: 1px solid var(--celeste);
+    }
+
+
+    .card-form button:hover {
+        opacity: 0.9;
+    }
+
+    .card-form {
+        max-width: 450px;
+        margin: 40px auto;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+        font-family: Arial, sans-serif;
+    }
+
+    .card-form h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .card-form label {
+        font-weight: bold;
+        color: #444;
+    }
+
+    .card-form input {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+        font-size: 15px;
+    }
+
+    .card-form input:focus {
+        border-color: var(--celeste);
+        outline: none;
+        box-shadow: 0 0 4px rgba(0,123,255,0.4);
+    }
+
+    .card-form .error {
+        color: #d60000;
+        font-size: 14px;
+        margin: 5px 0 10px 0;
+    }
+
+    /* === Tus estilos aplicados al botón === */
+    .controls button {
+        width: 100%;
+        padding: 12px;
+        border-radius: 6px;
+        font-size: 16px;
+        background: var(--celeste);
+        color: var(--blanco);
+        border: none;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    .controls button.secondary {
+        background: #fff;
+        color: var(--celeste);
+        border: 1px solid var(--celeste);
+    }
+
+    .controls button:hover {
+        opacity: 0.9;
+    }
