@@ -58,132 +58,268 @@ body{
   .main-nav{ display:flex; gap:8px; flex-wrap:wrap;}
 }
 
-    .card-form {
-        max-width: 450px;
-        margin: 40px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        font-family: Arial, sans-serif;
-    }
+/* === Formulario en tarjeta (aislado, no afecta al resto de la web) === */
 
-    .card-form h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
+.card-form {
+    max-width: 450px;
+    margin: 40px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+}
 
-    .card-form label {
-        font-weight: bold;
-        color: #444;
-    }
+.card-form h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
 
-    .card-form input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 15px;
-    }
+.card-form label {
+    font-weight: bold;
+    color: #444;
+}
 
-    .card-form input:focus {
-        border-color: #007bff;
-        outline: none;
-        box-shadow: 0 0 4px rgba(0,123,255,0.4);
-    }
+.card-form input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+}
 
-    .card-form .error {
-        color: #d60000;
-        font-size: 14px;
-        margin: 5px 0 10px 0;
-    }
+.card-form input:focus {
+    border-color: var(--celeste);
+    outline: none;
+    box-shadow: 0 0 4px rgba(0,168,232,0.4);
+}
 
-    .card-form button {
-        width: 100%;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 16px;
-        background: var(--celeste);
-        color: var(--blanco);
-        border: none;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+.card-form .error {
+    color: #d60000;
+    font-size: 14px;
+    margin: 5px 0 10px 0;
+}
 
-    .card-form button.secondary {
-        background: #fff;
-        color: var(--celeste);
-        border: 1px solid var(--celeste);
-    }
+/* Botones exclusivos del formulario */
+.card-form .form-controls {
+    margin-top: 15px;
+}
 
+.card-form .form-controls button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 16px;
+    background: var(--celeste);
+    color: var(--blanco);
+    border: none;
+    cursor: pointer;
+}
 
-    .card-form button:hover {
-        opacity: 0.9;
-    }
+.card-form .form-controls button.secondary {
+    background: #fff;
+    color: var(--celeste);
+    border: 1px solid var(--celeste);
+}
 
-    .card-form {
-        max-width: 450px;
-        margin: 40px auto;
-        background: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        font-family: Arial, sans-serif;
-    }
+.card-form .form-controls button:hover {
+    opacity: 0.9;
+}
 
-    .card-form h2 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #333;
-    }
+/* === Tabla de envíos (estilo aislado) === */
+.tabla-envios {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background: var(--blanco);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
 
-    .card-form label {
-        font-weight: bold;
-        color: #444;
-    }
+.tabla-envios th {
+    background: linear-gradient(180deg, var(--celeste), var(--celeste-dark));
+    color: var(--blanco);
+    padding: 12px;
+    text-align: left;
+    font-weight: bold;
+    font-size: 15px;
+}
 
-    .card-form input {
-        width: 100%;
-        padding: 10px;
-        margin-top: 5px;
-        border-radius: 6px;
-        border: 1px solid #ccc;
-        font-size: 15px;
-    }
+.tabla-envios td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--gris);
+    font-size: 14px;
+}
 
-    .card-form input:focus {
-        border-color: var(--celeste);
-        outline: none;
-        box-shadow: 0 0 4px rgba(0,123,255,0.4);
-    }
+.tabla-envios tr:nth-child(even) {
+    background: var(--gris-claro);
+}
 
-    .card-form .error {
-        color: #d60000;
-        font-size: 14px;
-        margin: 5px 0 10px 0;
-    }
+.tabla-envios tr:hover {
+    background: rgba(0,168,232,0.08);
+    transition: background 0.2s;
+}
 
-    /* === Tus estilos aplicados al botón === */
-    .controls button {
-        width: 100%;
-        padding: 12px;
-        border-radius: 6px;
-        font-size: 16px;
-        background: var(--celeste);
-        color: var(--blanco);
-        border: none;
-        cursor: pointer;
-        margin-top: 10px;
-    }
+/* Wrapper con variables propias (no globales) */
+.envio-cards-wrapper {
+    --envio-primary: var(--celeste);    /* CAMBIA ESTO AL COLOR PRINCIPAL DE TU WEB */
+    --envio-primary-hover: 1px solid var(--celeste); /* Y ESTE AL HOVER */
 
-    .controls button.secondary {
-        background: #fff;
-        color: var(--celeste);
-        border: 1px solid var(--celeste);
-    }
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    padding: 10px;
+}
 
-    .controls button:hover {
-        opacity: 0.9;
-    }
+/* Card */
+.envio-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 18px;
+    text-align: center;
+    transition: transform .2s ease, box-shadow .2s ease;
+    font-family: inherit;
+}
+
+.envio-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+/* Imagen genérica */
+.envio-card-img {
+    width: 100%;
+    height: 120px;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background-size: cover;
+    background-position: center;
+}
+
+.envio-card-img-estandar {
+    background-image: url('../images/estandar.jpeg');
+}
+
+.envio-card-img-urgente {
+    background-image: url('../images/urgente.jpg');
+}
+
+.envio-card-img-islas {
+    background-image: url('../images/islas.jpg');
+}
+
+.envio-card-img-2h {
+    background-image: url('../images/2h.jpg');
+}
+
+.envio-card-img-recogida {
+    background-image: url('../images/recogida.jpg');
+}
+
+/* Textos */
+.envio-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.envio-card-zone,
+.envio-card-time {
+    font-size: 0.85rem;
+    color: #666;
+}
+
+.envio-card-price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+/* Botón aislado, usando solo variables locales */
+.envio-card-btn {
+    background: var(--envio-primary);
+    color: #454545;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background .2s ease;
+    display: inline-block;
+    font-size: 0.95rem;
+}
+
+.envio-card-btn:hover {
+    background: var(--envio-primary-hover);
+}
+
+.veh-wrapper {
+    --envio-primary: var(--celeste);    /* CAMBIA ESTO AL COLOR PRINCIPAL DE TU WEB */
+    --envio-primary-hover: 1px solid var(--celeste); 
+
+    padding: 10px;
+    font-family: inherit;
+}
+
+.veh-filtros {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+}
+
+.veh-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 18px;
+    text-align: center;
+    transition: transform .2s ease, box-shadow .2s ease;
+    margin-bottom: 20px;
+}
+
+.veh-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+}
+
+.veh-card-img {
+    width: 100%;
+    height: 120px;
+    background: #ddd;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    background-size: cover;
+    background-position: center;
+}
+
+/* Puedes poner imágenes reales si quieres */
+.veh-img-furgo { background-color: #cce0ff; }
+.veh-img-moto { background-color: #ffe0cc; }
+.veh-img-furgon { background-color: #e0ffd4; }
+.veh-img-furgo2 { background-color: #d4d4ff; }
+
+.veh-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.veh-card-btn {
+    background: var(--veh-primary);
+    color: #fff;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 10px;
+    cursor: pointer;
+    transition: background .2s ease;
+    display: inline-block;
+}
+
+.veh-card-btn:hover {
+    background: var(--veh-primary-hover);
+}
+

@@ -15,8 +15,9 @@ include 'includes/cabecera.php';
     <div class="card">
         <h3>Zona administrador</h3>
         <ul>
-            <li><a href="crear_envio.php">➕ Crear envío</a></li>
-            <li><a href="listar_envios.php">📦 Ver envíos</a></li>
+            <li><a href="index.php?accion=crear_envio">➕ Crear envío</a></li>
+            <li><a href="index.php?accion=listar_envios">📦 Ver envíos</a></li>
+            <li><a href="index.php?accion=listar_clientes">📦 Ver Clientes</a></li>
         </ul>
     </div>
 <?php else: ?>
@@ -26,6 +27,6 @@ include 'includes/cabecera.php';
     </div>
 <?php endif; ?>
 
-<a href="../logout.php">Cerrar sesión</a>
+<a href="index.php?accion=logout">Cerrar sesión</a>
 
-<?php include("../includes/pie.php"); ?>
+<?php include 'includes/pie.php'; ?>

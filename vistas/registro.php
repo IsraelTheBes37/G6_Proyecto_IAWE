@@ -25,7 +25,9 @@
 
         <?php if (!empty($errorDB)) echo "<p class='error'>$errorDB</p>"; ?>
 
-        <button type="submit">Registrarse</button>
+        <div class="form-controls">
+            <button type="submit">Registrarse</button>
+        </div>
     </form>
 
 </div>

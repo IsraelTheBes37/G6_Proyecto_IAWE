@@ -18,20 +18,6 @@ function pintarTablaVehiculos($vehiculos) {
     echo "</table>";
 }
 
-function pintarTablaServicios($servicios) {
-    echo "<table class='table'>";
-    echo "<tr><th>ID</th><th>Nombre</th><th>Zona</th><th>Precio base (€)</th><th>Tiempo estimado (h)</th></tr>";
-    foreach ($servicios as $s) {
-        echo "<tr>";
-        echo "<td>".htmlspecialchars($s['id'])."</td>";
-        echo "<td>".htmlspecialchars($s['nombre'])."</td>";
-        echo "<td>".htmlspecialchars($s['zona'])."</td>";
-        echo "<td>".number_format($s['precio'],2,'.','')."</td>";
-        echo "<td>".intval($s['tiempo'])."</td>";
-        echo "</tr>";
-    }
-    echo "</table>";
-}
 
 // ---------- Funciones utilitarias sobre arrays ----------
 
@@ -71,46 +57,5 @@ function ordenarVehiculosPorKm(&$vehiculos, $orden='asc') {
     });
 }
 
-// Aumentar precio de todos los servicios en porcentaje (ej 10 -> +10%)
-function aumentarPrecioServicios(&$servicios, $porcentaje) {
-    foreach ($servicios as &$s) {
-        $s['precio'] *= (1 + $porcentaje/100);
-    }
-    unset($s);
-}
 
-// Buscar servicio por id devuelve index o null
-function buscarServicioPorId($servicios, $id) {
-    foreach ($servicios as $s) {
-        if ($s['id'] == $id) return $s;
-    }
-    return null;
-}
-
-// Editar el precio de un servicio por id
-function cambiarPrecioServicio(&$servicios, $id, $nuevoPrecio) {
-    foreach ($servicios as &$s) {
-        if ($s['id'] == $id) {
-            $s['precio'] = floatval($nuevoPrecio);
-            return true;
-        }
-    }
-    unset($s);
-    return false;
-}
-
-// Extraer todas las zonas disponibles (array único)
-function zonasUnicas($servicios) {
-    $zonas = [];
-    foreach ($servicios as $s) $zonas[] = $s['zona'];
-    return array_values(array_unique($zonas));
-}
-
-// Calcular coste estimado de envío según servicio, peso y distancia (ejemplo de uso)
-function estimarCoste($servicio, $pesoKg, $km) {
-    // fórmula simple: precio base + 0.5€/kg + 0.15€/km
-    $base = floatval($servicio['precio']);
-    $coste = $base + (0.5 * $pesoKg) + (0.15 * $km);
-    return $coste;
-}
 ?>

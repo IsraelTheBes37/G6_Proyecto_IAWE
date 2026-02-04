@@ -17,7 +17,7 @@
         <?php if (!empty($errores['login'])) echo "<p class='error'>{$errores['login']}</p>"; ?>
         <?php if (!empty($errorDB)) echo "<p class='error'>$errorDB</p>"; ?>
 
-        <div class="controls">
+        <div class="form-controls">
             <button type="submit">Entrar</button>
         </div>
 

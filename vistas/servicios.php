@@ -1,68 +1,77 @@
 <?php
 include("includes/cabecera.php");
-include("funciones.php");
+?>
+<h2>Nuestros Servicios</h2>
+<div class="envio-cards-wrapper">
 
-// datos servicios
-$servicios = [
-    ["id"=>1,"nombre"=>"Envío estándar peninsular","zona"=>"Peninsular","precio"=>6.90,"tiempo"=>48],
-    ["id"=>2,"nombre"=>"Envío urgente peninsular","zona"=>"Peninsular","precio"=>12.50,"tiempo"=>24],
-    ["id"=>3,"nombre"=>"Envío islas (Baleares/Canarias)","zona"=>"Islas","precio"=>18.00,"tiempo"=>72],
-    ["id"=>4,"nombre"=>"Entrega en 2h (ciudades)","zona"=>"Local","precio"=>9.99,"tiempo"=>2],
-    ["id"=>5,"nombre"=>"Recogida programada","zona"=>"Peninsular","precio"=>4.50,"tiempo"=>48],
-];
+    <div class="envio-card">
+        <div class="envio-card-img envio-card-img-estandar"></div>
+        <div class="envio-card-title">Envío estándar peninsular</div>
+        <div class="envio-card-zone">Zona: Peninsular</div>
+        <div class="envio-card-price">6.90 €</div>
+        <div class="envio-card-time">48 h</div>
+        <div class="envio-card-btn" data-servicio="Envío estándar peninsular">Seleccionar</div>
+    </div>
 
-// acciones: aumentar precio global (+10%), cambiar precio individual
-if (isset($_GET['accion'])) {
-    if ($_GET['accion'] === 'aumentar') {
-        aumentarPrecioServicios($servicios, 10);
-    } elseif ($_GET['accion'] === 'cambiar' && isset($_GET['id'], $_GET['nuevo'])) {
-        cambiarPrecioServicio($servicios, intval($_GET['id']), floatval($_GET['nuevo']));
-    } elseif ($_GET['accion'] === 'filtrar_zona' && isset($_GET['zona'])) {
-        $zona = $_GET['zona'];
-        $servicios = array_filter($servicios, fn($s)=> $s['zona'] === $zona);
-    }
-}
+    <div class="envio-card">
+        <div class="envio-card-img envio-card-img-urgente"></div>
+        <div class="envio-card-title">Envío urgente peninsular</div>
+        <div class="envio-card-zone">Zona: Peninsular</div>
+        <div class="envio-card-price">12.50 €</div>
+        <div class="envio-card-time">24 h</div>
+        <div class="envio-card-btn" data-servicio="Envío urgente peninsular">Seleccionar</div>
+    </div>
 
-// mostrar
-echo "<h2>Servicios</h2>";
-echo "<div class='card'>";
-echo "<strong>Zonas disponibles:</strong> ";
-$zonas = zonasUnicas($servicios);
-echo implode(" • ", $zonas);
-echo "</div>";
+    <div class="envio-card">
+        <div class="envio-card-img envio-card-img-islas"></div>
+        <div class="envio-card-title">Envío islas (Baleares/Canarias)</div>
+        <div class="envio-card-zone">Zona: Islas</div>
+        <div class="envio-card-price">18.00 €</div>
+        <div class="envio-card-time">72 h</div>
+        <div class="envio-card-btn" data-servicio="Envío islas (Baleares/Canarias)">Seleccionar</div>
+    </div>
 
-// controles
-echo "<div class='controls card'>";
-echo "<form method='get' style='display:flex; gap:8px; align-items:center;'>";
-echo "<button name='accion' value='aumentar'>Aumentar precios +10%</button>";
-echo "</form>";
+    <div class="envio-card">
+        <div class="envio-card-img envio-card-img-2h"></div>
+        <div class="envio-card-title">Entrega en 2h (ciudades)</div>
+        <div class="envio-card-zone">Zona: Local</div>
+        <div class="envio-card-price">9.99 €</div>
+        <div class="envio-card-time">2 h</div>
+        <div class="envio-card-btn" data-servicio="Entrega en 2h (ciudades)">Seleccionar</div>
+    </div>
 
-echo "<form method='get' style='display:flex; gap:8px; align-items:center; margin-top:8px;'>";
-echo "<label>Filtrar zona:</label>";
-echo "<select name='zona'>";
-echo "<option value=''>--</option>";
-foreach ($zonas as $z) echo "<option value='".htmlspecialchars($z)."'>".htmlspecialchars($z)."</option>";
-echo "</select>";
-echo "<button name='accion' value='filtrar_zona'>Filtrar</button>";
-echo "</form>";
+    <div class="envio-card">
+        <div class="envio-card-img envio-card-img-recogida"></div>
+        <div class="envio-card-title">Recogida programada</div>
+        <div class="envio-card-zone">Zona: Peninsular</div>
+        <div class="envio-card-price">4.50 €</div>
+        <div class="envio-card-time">48 h</div>
+        <div class="envio-card-btn" data-servicio="Recogida programada">Seleccionar</div>
+    </div>
 
-echo "<form method='get' style='display:flex; gap:8px; align-items:center; margin-top:8px;'>";
-echo "Cambiar precio id: <input type='number' name='id' style='width:80px'>";
-echo " Nuevo (€): <input step='0.01' type='number' name='nuevo' style='width:120px'>";
-echo "<button name='accion' value='cambiar'>Cambiar</button>";
-echo "</form>";
+</div>
 
-echo "</div>";
-
-// tabla servicios
-pintarTablaServicios($servicios);
-
-// cálculo ejemplo de coste estimado (usar servicio id=2, peso 5kg, 30km)
-$serv = buscarServicioPorId($servicios, 2);
-if ($serv) {
-    $coste = estimarCoste($serv, 5, 30);
-    echo "<div class='card small'>Ejemplo: coste estimado (Envío urgente, 5kg, 30km): <strong>".number_format($coste,2,'.','')."€</strong></div>";
-}
-
+<?php
 include("includes/pie.php");
 ?>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const botones = document.querySelectorAll(".envio-card-btn");
+
+    botones.forEach(boton => {
+        boton.addEventListener("click", function () {
+
+            const servicio = this.getAttribute("data-servicio");
+
+            const confirmar = confirm("¿Estás seguro de comprar: " + servicio + "?");
+
+            if (confirmar) {
+                alert("Gracias por tu compra");
+            }
+        });
+    });
+
+});
+</script>

@@ -1,20 +1,40 @@
 <?php
 session_start();
 
+// ==========================
+// INCLUDES PRINCIPALES
+// ==========================
 require_once 'modelos/modelo.php';
 require_once 'herramientas/funciones.php';
+require_once 'herramientas/funciones_para_arrays.php';
 
-// Conectar a la base de datos
+// ==========================
+// CONEXIÓN BBDD
+// ==========================
 $conexion = conectar_db();
 
-// Acción por defecto
+// ==========================
+// DATOS ESTÁTICOS (ARRAYS)
+// ==========================
+$vehiculosBase = [
+    ["id"=>1, "tipo"=>"Furgoneta", "matricula"=>"1234-ABC", "capacidad"=>1200, "disponible"=>true, "km"=>120000],
+    ["id"=>2, "tipo"=>"Moto", "matricula"=>"MOTO-01", "capacidad"=>30, "disponible"=>true, "km"=>25000],
+    ["id"=>3, "tipo"=>"Furgón", "matricula"=>"9999-ZZZ", "capacidad"=>2500, "disponible"=>false, "km"=>340000],
+    ["id"=>4, "tipo"=>"Furgoneta", "matricula"=>"5678-DEF", "capacidad"=>1000, "disponible"=>true, "km"=>90000],
+];
+
+// ==========================
+// ACCIÓN POR DEFECTO
+// ==========================
 $accion = $_GET['accion'] ?? 'home';
 
-// Router principal
+// ==========================
+// ROUTER PRINCIPAL
+// ==========================
 switch ($accion) {
 
     // ==========================
-    // HOME (listado envíos)
+    // HOME
     // ==========================
     case 'home':
         include 'vistas/home.php';
@@ -24,23 +44,21 @@ switch ($accion) {
     // LOGIN
     // ==========================
     case 'login':
+        $errores = [];
         include 'vistas/login.php';
         break;
 
     case 'validar_login':
 
-        // Saneamiento
         $correo = trim($_POST['correo'] ?? '');
         $clave  = $_POST['clave'] ?? '';
-
         $errores = [];
 
-        // Validación
-        if (empty($correo)) {
+        if ($correo === '') {
             $errores['correo'] = 'Correo obligatorio';
         }
-        if (empty($clave)) {
-            $errores['clave'] = 'Clave obligatoria';
+        if ($clave === '') {
+            $errores['clave'] = 'Contraseña obligatoria';
         }
 
         if (!empty($errores)) {
@@ -48,11 +66,10 @@ switch ($accion) {
             exit;
         }
 
-        // Modelo
         $usuario = login_usuario($conexion, $correo, $clave);
 
         if (is_string($usuario)) {
-            $errorDB = $usuario;
+            $errores['login'] = 'Error interno de base de datos';
             include 'vistas/login.php';
             exit;
         }
@@ -64,7 +81,7 @@ switch ($accion) {
         }
 
         $_SESSION['usuario'] = $usuario;
-        header('Location: index.php');
+        header('Location: index.php?accion=dashboard');
         exit;
 
     // ==========================
@@ -76,37 +93,144 @@ switch ($accion) {
         exit;
 
     // ==========================
-    // SERVICIOS
+    // REGISTRO
+    // ==========================
+    case 'registro':
+        $errores = [];
+        include 'vistas/registro.php';
+        break;
+
+    case 'guardar_registro':
+
+        $nombre   = trim($_POST['nombre'] ?? '');
+        $apellido = trim($_POST['apellido'] ?? '');
+        $correo   = trim($_POST['correo'] ?? '');
+        $clave    = $_POST['clave'] ?? '';
+
+        $errores = [];
+
+        if ($nombre === '')   $errores['nombre'] = 'Nombre obligatorio';
+        if ($apellido === '') $errores['apellido'] = 'Apellido obligatorio';
+        if ($correo === '' || !validar_email($correo)) {
+            $errores['correo'] = 'Email no válido';
+        }
+        if ($clave === '')    $errores['clave'] = 'Contraseña obligatoria';
+
+        if (!empty($errores)) {
+            include 'vistas/registro.php';
+            exit;
+        }
+
+        $resultado = registrar_cliente($conexion, $nombre, $apellido, $correo, $clave);
+
+        if ($resultado !== true) {
+            $errorDB = $resultado;
+            include 'vistas/registro.php';
+            exit;
+        }
+
+        $_SESSION['usuario'] = login_usuario($conexion, $correo, $clave);
+        header('Location: index.php?accion=dashboard');
+        exit;
+
+    // ==========================
+    // DASHBOARD
+    // ==========================
+    case 'dashboard':
+        proteger_usuario();
+        include 'vistas/dashboard.php';
+        break;
+
+    // ==========================
+    // SERVICIOS (ARRAYS)
     // ==========================
     case 'servicios':
         include 'vistas/servicios.php';
         break;
 
     // ==========================
-    // VEHÍCULOS
+    // VEHÍCULOS (ARRAYS)
     // ==========================
     case 'vehiculos':
+
+        $vehiculos = $vehiculosBase;
+        $total = count($vehiculos);
+        $disponibles = contarVehiculosDisponibles($vehiculos);
+        $capacidadTotal = capacidadTotal($vehiculos);
+
+        include 'vistas/vehiculos.php';
+        break;
+
+    case 'ordenar_km':
+
+        $vehiculos = $vehiculosBase;
+        $orden = $_GET['orden'] ?? 'asc';
+
+        ordenarVehiculosPorKm($vehiculos, $orden);
+
+        $total = count($vehiculos);
+        $disponibles = contarVehiculosDisponibles($vehiculos);
+        $capacidadTotal = capacidadTotal($vehiculos);
+
+        include 'vistas/vehiculos.php';
+        break;
+
+    case 'filtrar_tipo':
+
+        $vehiculos = $vehiculosBase;
+        $tipo = $_GET['tipo'] ?? '';
+
+        if ($tipo !== '') {
+            $vehiculos = vehiculosPorTipo($vehiculos, $tipo);
+        }
+
+        $total = count($vehiculos);
+        $disponibles = contarVehiculosDisponibles($vehiculos);
+        $capacidadTotal = capacidadTotal($vehiculos);
+
         include 'vistas/vehiculos.php';
         break;
 
     // ==========================
-    // SOBRE NOSOTROS
+    // LISTA CLIENES
     // ==========================
-    case 'acerca':
-        include 'vistas/acerca.php';
+    case 'listar_clientes':
+        include 'vistas/listar_clientes.php';
         break;
 
     // ==========================
-    // NUEVO ENVÍO (FORMULARIO)
+    // LISTAR ENVÍOS
     // ==========================
-    case 'nuevo_envio':
-        proteger_admin(); // función tuya
-        include 'vistas/nuevo_envio.php';
+    case 'listar_envios':
+
+        proteger_usuario();
+
+        if ($_SESSION['usuario']['rol'] === 'admin') {
+            $envios = obtener_envios($conexion);
+        } else {
+            $envios = obtener_envios_cliente(
+                $conexion,
+                $_SESSION['usuario']['id']
+            );
+        }
+
+        if (is_string($envios)) {
+            die($envios);
+        }
+
+        include 'vistas/listar_envios.php';
         break;
 
     // ==========================
-    // GUARDAR ENVÍO
+    // CREAR ENVÍO
     // ==========================
+    case 'crear_envio':
+        proteger_admin();
+        $clientes = obtener_clientes($conexion);
+        $estados  = obtener_estados($conexion);
+        include 'vistas/crear_envio.php';
+        break;
+
     case 'guardar_envio':
         proteger_admin();
 
@@ -116,15 +240,13 @@ switch ($accion) {
 
         $errores = [];
 
-        if ($cliente_id <= 0) {
-            $errores['cliente'] = 'Cliente obligatorio';
-        }
-        if ($estado_id <= 0) {
-            $errores['estado'] = 'Estado obligatorio';
-        }
+        if ($cliente_id <= 0) $errores['cliente'] = 'Cliente obligatorio';
+        if ($estado_id <= 0)  $errores['estado'] = 'Estado obligatorio';
 
         if (!empty($errores)) {
-            include 'vistas/nuevo_envio.php';
+            $clientes = obtener_clientes($conexion);
+            $estados  = obtener_estados($conexion);
+            include 'vistas/crear_envio.php';
             exit;
         }
 
@@ -132,73 +254,36 @@ switch ($accion) {
 
         if ($resultado !== true) {
             $errorDB = $resultado;
-            include 'vistas/nuevo_envio.php';
+            include 'vistas/crear_envio.php';
             exit;
         }
 
-        header('Location: index.php');
+        header('Location: index.php?accion=listar_envios');
         exit;
-    
+
     // ==========================
-    // REGISTRO
+    // ELIMINAR ENVÍO
     // ==========================
-    case 'registro':
-        include 'vistas/registro.php';
+    case 'eliminar_envio':
+        proteger_admin();
+
+        $id = (int)($_GET['id'] ?? 0);
+        if ($id > 0) {
+            $resultado = eliminar_envio($conexion, $id);
+            if ($resultado !== true) {
+                die($resultado);
+            }
+        }
+
+        header('Location: index.php?accion=listar_envios');
+        exit;
+
+    // ==========================
+    // ACERCA
+    // ==========================
+    case 'acerca':
+        include 'vistas/acerca.php';
         break;
-    
-    // ==========================
-    // DASHBOOARD
-    // ==========================
-    case 'dashboard':
-        include 'vistas/dashboard.php';
-        exit;
-
-    case 'guardar_registro':
-
-        // Recoger datos
-        $nombre   = trim($_POST['nombre'] ?? '');
-        $apellido = trim($_POST['apellido'] ?? '');
-        $correo   = trim($_POST['correo'] ?? '');
-        $clave    = $_POST['clave'] ?? '';
-
-        $errores = [];
-
-        // Validaciones
-        if ($nombre === '') {
-            $errores['nombre'] = 'Nombre obligatorio';
-        }
-        if ($apellido === '') {
-            $errores['apellido'] = 'Apellido obligatorio';
-        }
-        if ($correo === '' || !validar_email($correo)) {
-            $errores['correo'] = 'Email no válido';
-        }
-        if ($clave === '') {
-            $errores['clave'] = 'Contraseña obligatoria';
-        }
-
-        // Si hay errores volver al formulario
-        if (!empty($errores)) {
-            include 'vistas/registro.php';
-            exit;
-        }
-
-        // Insertar cliente
-        $resultado = registrar_cliente($conexion, $nombre, $apellido, $correo, $clave);
-
-        if ($resultado !== true) {
-            $errorDB = $resultado;
-            include 'vistas/registro.php';
-            exit;
-        }
-
-        // Login automático tras registro
-        $usuario = login_usuario($conexion, $correo, $clave);
-        $_SESSION['usuario'] = $usuario;
-
-        header('Location: index.php?accion=dashboard');
-        exit;
-
 
     // ==========================
     // POR DEFECTO

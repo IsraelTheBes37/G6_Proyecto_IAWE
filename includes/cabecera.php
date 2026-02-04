@@ -18,9 +18,9 @@
             <a href="index.php?accion=servicios">Servicios</a>
             <a href="index.php?accion=vehiculos">Vehículos</a>
             <a href="index.php?accion=acerca">Sobre nosotros</a>
-
+            
             <?php if (isset($_SESSION['usuario'])): ?>
-                <a href="index.php?accion=dashboard">Dashboard</a>
+                <a href="index.php?accion=dashboard">Dashboard</a><br><br>
                 <a href="index.php?accion=logout">Salir</a>
             <?php else: ?>
                 <a href="index.php?accion=login">Login</a>
